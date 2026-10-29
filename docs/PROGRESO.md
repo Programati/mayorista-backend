@@ -12,15 +12,15 @@
 
 ## Fases
 
-| #   | Fase                                                          | Estado    | Notas                                                    |
-| --- | ------------------------------------------------------------- | --------- | -------------------------------------------------------- |
-| 1   | Setup del proyecto (pnpm, TS, Express, Mongo, estructura)     | En curso  | Repo, dependencias y arranque OK. Falta Mongo y estructura |
-| 2   | Auth: registro, login, JWT, roles                             | Pendiente |                                                          |
-| 3   | Catálogos: marcas, categorías, envases, medidas, empaquetados | Pendiente |                                                          |
-| 4   | Productos y variantes                                         | Pendiente |                                                          |
-| 5   | Stock                                                         | Pendiente |                                                          |
-| 6   | Pedidos: preview, crear, cancelar                             | Pendiente |                                                          |
-| 7   | Frontend                                                      | Pendiente |                                                          |
+| #   | Fase                                                          | Estado    | Notas                                                      |
+| --- | ------------------------------------------------------------- | --------- | ---------------------------------------------------------- |
+| 1   | Setup del proyecto (pnpm, TS, Express, Mongo, estructura)     | Terminada | Repo, dependencias y arranque OK. Falta Mongo y estructura |
+| 2   | Auth: registro, login, JWT, roles                             | Pendiente |                                                            |
+| 3   | Catálogos: marcas, categorías, envases, medidas, empaquetados | Pendiente |                                                            |
+| 4   | Productos y variantes                                         | Pendiente |                                                            |
+| 5   | Stock                                                         | Pendiente |                                                            |
+| 6   | Pedidos: preview, crear, cancelar                             | Pendiente |                                                            |
+| 7   | Frontend                                                      | Pendiente |                                                            |
 
 Estados posibles: Pendiente · En curso · Terminada · Bloqueada.
 
@@ -36,15 +36,15 @@ Estados posibles: Pendiente · En curso · Terminada · Bloqueada.
 
 ## Decisiones tomadas
 
-| Fecha      | Decisión                                                 | Motivo                                                              |
-| ---------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
-| 2026-10-29 | Stack: TypeScript, Express 5, pnpm, MongoDB con Mongoose | Definido en PERFIL_TECNICO.md                                       |
-| 2026-10-29 | `dev` y `start` ejecutan el `.ts` directo con Node 24    | Evita un paso de compilación en esta etapa                          |
-| 2026-10-29 | `tsconfig` con `noEmit: true`                            | Node ejecuta TypeScript; `tsc` solo verifica tipos                  |
-| 2026-10-29 | `"type": "module"` (ESM)                                 | Imports con `import` / `export`                                     |
-| 2026-10-29 | Commit inicial en `main` y setup en `chore/project-setup` | Convención de `git-workflow.md`                                     |
-| 2026-10-29 | Merge de PRs con squash                                  | Un commit por cambio en `main`                                      |
-| 2026-10-29 | Stock guardado en unidades sueltas                       | Permite convertir a cajones sin perder precisión (REGLAS_NEGOCIO)  |
+| Fecha      | Decisión                                                  | Motivo                                                            |
+| ---------- | --------------------------------------------------------- | ----------------------------------------------------------------- |
+| 2026-10-29 | Stack: TypeScript, Express 5, pnpm, MongoDB con Mongoose  | Definido en PERFIL_TECNICO.md                                     |
+| 2026-10-29 | `dev` y `start` ejecutan el `.ts` directo con Node 24     | Evita un paso de compilación en esta etapa                        |
+| 2026-10-29 | `tsconfig` con `noEmit: true`                             | Node ejecuta TypeScript; `tsc` solo verifica tipos                |
+| 2026-10-29 | `"type": "module"` (ESM)                                  | Imports con `import` / `export`                                   |
+| 2026-10-29 | Commit inicial en `main` y setup en `chore/project-setup` | Convención de `git-workflow.md`                                   |
+| 2026-10-29 | Merge de PRs con squash                                   | Un commit por cambio en `main`                                    |
+| 2026-10-29 | Stock guardado en unidades sueltas                        | Permite convertir a cajones sin perder precisión (REGLAS_NEGOCIO) |
 
 ## Pendientes y deuda técnica
 
@@ -62,4 +62,4 @@ Estados posibles: Pendiente · En curso · Terminada · Bloqueada.
 
 - Qué se hizo: repo con `.gitignore` y `docs/` en `main`; setup de pnpm, TypeScript y Express en `chore/project-setup`; verificado `typecheck` y `dev` respondiendo en `localhost:3000`.
 - Qué quedó pendiente: merge del PR de setup, Database.md en Mongo y estructura de carpetas.
-- Ramas y PRs: `main`, `chore/project-setup` (PR pendiente).
+- Ramas y PRs: `main`, `chore/project-setup` (PR mergeado).
