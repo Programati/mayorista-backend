@@ -181,34 +181,32 @@ db.createCollection("orders", {
         items: {
           oneOf: [
             {
-              // Item estándar
               bsonType: "object",
               required: ["type", "variant_id", "product_id", "measurement_unit_id",
                          "sku", "name", "quantity", "units", "unit_price", "subtotal"],
               properties: {
                 type:                { enum: ["standard"] },
-                variant_id:          { bsonType: "objectId" },   // products.variants[]._id
-                product_id:          { bsonType: "objectId" },   // copiado
-                measurement_unit_id: { bsonType: "objectId" },   // copiado
-                sku:                 { bsonType: "string" },     // copiado
-                name:                { bsonType: "string" },     // copiado
-                quantity:            { bsonType: "int", minimum: 1 },  // cajones/packs
-                units:               { bsonType: "int", minimum: 1 },  // quantity × packaging.units (lo calcula el servidor)
-                unit_price:          { bsonType: "decimal" },    // copiado: wholesale_price, por empaquetado (informativo)
-                subtotal:            { bsonType: "decimal" }     // quantity × unit_price
+                variant_id:          { bsonType: "objectId" },
+                product_id:          { bsonType: "objectId" },
+                measurement_unit_id: { bsonType: "objectId" },
+                sku:                 { bsonType: "string" },
+                name:                { bsonType: "string" },
+                quantity:            { bsonType: "int", minimum: 1 },
+                units:               { bsonType: "int", minimum: 1 },
+                unit_price:          { bsonType: "decimal" },
+                subtotal:            { bsonType: "decimal" }
               }
             },
             {
-              // Item mixto
               bsonType: "object",
               required: ["type", "packaging_id", "packaging_name", "units",
                          "measurement_unit_id", "lines"],
               properties: {
                 type:                { enum: ["mixed"] },
                 packaging_id:        { bsonType: "objectId" },
-                packaging_name:      { bsonType: "string" },     // copiado
-                units:               { bsonType: "int", minimum: 1 },  // = packagings.units
-                measurement_unit_id: { bsonType: "objectId" },   // misma medida para todas las líneas
+                packaging_name:      { bsonType: "string" },
+                units:               { bsonType: "int", minimum: 1 },
+                measurement_unit_id: { bsonType: "objectId" },
                 lines: {
                   bsonType: "array",
                   minItems: 1,
@@ -217,12 +215,12 @@ db.createCollection("orders", {
                     required: ["variant_id", "product_id", "sku", "name", "units", "unit_price", "subtotal"],
                     properties: {
                       variant_id: { bsonType: "objectId" },
-                      product_id: { bsonType: "objectId" },      // copiado
-                      sku:        { bsonType: "string" },        // copiado
-                      name:       { bsonType: "string" },        // copiado
+                      product_id: { bsonType: "objectId" },
+                      sku:        { bsonType: "string" },
+                      name:       { bsonType: "string" },
                       units:      { bsonType: "int", minimum: 1 },
-                      unit_price: { bsonType: "decimal" },       // wholesale_price ÷ packagings.units, por unidad (informativo)
-                      subtotal:   { bsonType: "decimal" }        // units × wholesale_price ÷ packagings.units
+                      unit_price: { bsonType: "decimal" },
+                      subtotal:   { bsonType: "decimal" }
                     }
                   }
                 }
