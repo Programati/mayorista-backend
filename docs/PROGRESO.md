@@ -5,22 +5,22 @@
 ## Estado actual
 
 - **Fase:** 1 - Setup
-- **Etapa:** Conexión a MongoDB con manejo de errores (cerrada en el código, pendiente de commit y PR)
-- **Rama activa:** `feature/database-connection`
-- **Próximo paso:** Estructura de carpetas (`modules/`, `shared/`, `http/`) y luego el framework de tests
-- **Esperando aprobación para:** Merge del PR de conexión a MongoDB
+- **Etapa:** Separación de `app.ts` y `server.ts` (cerrada en el código, pendiente de commit y PR)
+- **Rama activa:** `refactor/app-server-split`
+- **Próximo paso:** Framework de tests (Vitest o Jest), antes del módulo auth
+- **Esperando aprobación para:** Merge del PR de separación de app y server
 
 ## Fases
 
-| #   | Fase                                                          | Estado    | Notas                                                                                                             |
-| --- | ------------------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------- |
-| 1   | Setup del proyecto (pnpm, TS, Express, Mongo, estructura)     | En curso  | Repo, validación de entorno (mergeado), MongoDB en Docker y conexión (PR pendiente). Falta estructura de carpetas |
-| 2   | Auth: registro, login, JWT, roles                             | Pendiente |                                                                                                                   |
-| 3   | Catálogos: marcas, categorías, envases, medidas, empaquetados | Pendiente |                                                                                                                   |
-| 4   | Productos y variantes                                         | Pendiente |                                                                                                                   |
-| 5   | Stock                                                         | Pendiente |                                                                                                                   |
-| 6   | Pedidos: preview, crear, cancelar                             | Pendiente |                                                                                                                   |
-| 7   | Frontend                                                      | Pendiente |                                                                                                                   |
+| #   | Fase                                                          | Estado    | Notas                                                                                                                                         |
+| --- | ------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Setup del proyecto (pnpm, TS, Express, Mongo, estructura)     | En curso  | Validación de entorno, MongoDB en Docker, conexión y app separada de server (PR pendiente). Falta framework de tests y estructura de carpetas |
+| 2   | Auth: registro, login, JWT, roles                             | Pendiente |                                                                                                                                               |
+| 3   | Catálogos: marcas, categorías, envases, medidas, empaquetados | Pendiente |                                                                                                                                               |
+| 4   | Productos y variantes                                         | Pendiente |                                                                                                                                               |
+| 5   | Stock                                                         | Pendiente |                                                                                                                                               |
+| 6   | Pedidos: preview, crear, cancelar                             | Pendiente |                                                                                                                                               |
+| 7   | Frontend                                                      | Pendiente |                                                                                                                                               |
 
 Estados posibles: Pendiente · En curso · En revisión · Terminada · Bloqueada.
 
@@ -66,17 +66,16 @@ Estados posibles: Pendiente · En curso · En revisión · Terminada · Bloquead
 
 ## Pendientes y deuda técnica
 
-- [ ] Commitear y abrir PR de `feature/database-connection` (`server.ts`, `database.ts`, `.env.example`, `package.json`, `pnpm-lock.yaml`)
-- [ ] Confirmar que `docker-compose.yml` está commiteado (rama `chore/mongo-docker`) o incluirlo en el PR anterior
+- [ ] Commitear y abrir PR de `refactor/app-server-split` (`src/app.ts`, `src/server.ts`)
+- [ ] Verificar `echo $?` = 1 con la base apagada (usando `node` sin `--watch`)
 - [ ] Definir framework de tests (Vitest o Jest) antes del módulo auth
-- [ ] Seguridad: el MongoDB del proyecto no tiene autenticación (warning de arranque). Anotado para después del MVP local, antes de cualquier despliegue
-- [ ] Archivo `.env.example` con `MONGODB_URI` y sin valores reales (verificar)
+- [ ] Seguridad: el MongoDB del proyecto no tiene autenticación. Anotado para antes de cualquier despliegue
 
 ## Preguntas de comprobación pendientes
 
-- Pregunta 1 de conexión: explicar por qué el `await` lanza la excepción en la misma línea (respondida, pendiente de validar).
-- Pregunta de replica set: qué pasaría con los datos si se borra el volumen con `docker compose down -v` y qué habría que volver a correr (sin respuesta todavía).
-- Pregunta de `directConnection`: qué host intentaría usar el driver sin ese parámetro (sin respuesta todavía).
+- Por qué `echo $?` debe ser `1` aunque el mensaje sea el mismo (sin respuesta todavía).
+- Por qué `createApp()` no llama a `connectDatabase()` (respondida: permite testear rutas sin base).
+- Qué pasa con las carpetas vacías en Git (respondida: no se versionan; `estructura-carpetas.md` es una guía).
 
 ## Historial de sesiones
 
@@ -90,3 +89,6 @@ Estados posibles: Pendiente · En curso · En revisión · Terminada · Bloquead
 - Qué se hizo: MongoDB levantado en Docker como replica set `rs0`. Resueltos el conflicto de puerto 27017 (con el `mongod` del sistema) y el host del replica set. Cargadas las colecciones e índices de `docs/Database.md`. Instalado Mongoose y creado `src/config/database.ts` con `connectDatabase` y `disconnectDatabase`. Probado el camino feliz (conexión OK) y el de error (puerto incorrecto: el servidor no arranca). `server.ts` quedó con `process.exit(1)` si la base no conecta.
 - Qué quedó pendiente: commit y PR de la conexión, y la estructura de carpetas.
 - Ramas y PRs: `main` (base), `feature/database-connection` (PR pendiente).
+- Qué se hizo (refactor): `src/app.ts` con `createApp()` (Express y `express.json()`, sin base ni `listen`). `src/server.ts` conecta la base, crea la app y abre el puerto. Verificado: arranque con base, arranque sin base.
+- Qué quedó pendiente: commit y PR de la separación, framework de tests, estructura de carpetas.
+- Ramas y PRs: `main` (base), `feature/database-connection` (mergeado), `refactor/app-server-split` (PR pendiente).
