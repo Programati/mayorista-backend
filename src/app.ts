@@ -1,13 +1,11 @@
-import express, { type Express, type Request, type Response } from "express";
+import express from "express";
+import { apiRouter } from "./http/routes.ts";
 
-export function createApp(): Express {
+export function createApp() {
   const app = express();
 
   app.use(express.json());
-
-  app.get("/", (req: Request, res: Response) => {
-    res.send("Hello World!");
-  });
+  app.use("/api", apiRouter);
 
   return app;
 }
