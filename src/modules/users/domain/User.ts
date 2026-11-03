@@ -1,12 +1,9 @@
 import { CannotDeactivateSelf, UserAlreadyInactive } from "./errors.ts";
-import type { Role } from "./Role.ts";
 
 export interface UserProps {
   id: string;
   email: string;
   name: string;
-  passwordHash: string;
-  role: Role;
   active: boolean;
   created: Date;
   modified: Date;
@@ -17,19 +14,15 @@ export class User {
   readonly id: string;
   readonly email: string;
   readonly name: string;
-  readonly passwordHash: string;
-  readonly role: Role;
-  active: boolean;
   readonly created: Date;
-  modified: Date;
-  modifiedBy: string | null;
+  private _active: boolean;
+  private _modified: Date;
+  private _modifiedBy: string | null;
 
   constructor({
     id,
     email,
     name,
-    passwordHash,
-    role,
     active,
     created,
     modified,
@@ -38,40 +31,33 @@ export class User {
     this.id = id;
     this.email = email;
     this.name = name;
-    this.passwordHash = passwordHash;
-    this.role = role;
-    this.active = active;
     this.created = created;
-    this.modified = modified;
-    this.modifiedBy = modifiedBy;
+    this._active = active;
+    this._modified = modified;
+    this._modifiedBy = modifiedBy;
   }
 
-  static create(input: {
-    id: string;
-    email: string;
-    name: string;
-    passwordHash: string;
-  }): User {
-    const now = new Date();
-    return new User({
-      ...input,
-      role: "customer",
-      active: true,
-      created: now,
-      modified: now,
-      modifiedBy: input.id,
-    });
+  get active(): boolean {
+    return this._active;
+  }
+
+  get modified(): Date {
+    return this._modified;
+  }
+
+  get modifiedBy(): string | null {
+    return this._modifiedBy;
   }
 
   deactivate(actorId: string): void {
     if (this.id === actorId) {
       throw new CannotDeactivateSelf();
     }
-    if (!this.active) {
+    if (!this._active) {
       throw new UserAlreadyInactive();
     }
-    this.active = false;
-    this.modified = new Date();
-    this.modifiedBy = actorId;
+    this._active = false;
+    this._modified = new Date();
+    this._modifiedBy = actorId;
   }
 }
