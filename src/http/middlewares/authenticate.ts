@@ -4,8 +4,6 @@ import type {
   TokenService,
 } from "../../modules/auth/application/ports/TokenService.ts";
 
-// Agrega req.user al tipo Request de Express. Está declarado acá porque
-// authenticate es el único que lo escribe; authorize y los controladores lo leen.
 declare global {
   namespace Express {
     interface Request {
