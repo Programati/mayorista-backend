@@ -126,6 +126,15 @@ Un pedido tiene uno o más items. Cada item es `standard` o `mixed`.
 - En las clases de error, `this.name` tiene el mismo valor que el nombre de la clase, en inglés.
 - Las columnas de Mongo mantienen snake_case (`modified_by`, `password_hash`), como en `Modelo_BD.md`. La conversión a camelCase la hace el adaptador de persistencia.
 
+## 11. Bounded contexts y acceso
+
+- `auth` y `users` son contextos separados. Cada uno tiene su entidad, sus puertos y sus casos de uso. Ninguno importa del otro en domain ni en application.
+- Ambos guardan datos en la misma colección `users`. Cada adaptador escribe solo sus campos.
+- Login: se busca el email, se verifica la contraseña y, solo si es correcta, se revisa `active`.
+- Email o contraseña incorrectos: 401, sin distinguir cuál falló.
+- Contraseña correcta y cuenta dada de baja: 403.
+- Registro con email ya usado: 409. Si la cuenta está dada de baja, el mensaje lo indica.
+
 ---
 
 ## Fuera del MVP (no se hace por ahora)
