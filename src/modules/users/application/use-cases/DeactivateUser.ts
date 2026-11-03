@@ -6,7 +6,7 @@ import {
   UserAlreadyInactive,
 } from "../../domain/errors.ts";
 import type { User } from "../../domain/User.ts";
-import type { UserRepository } from "../../ports/UserRepository.ts";
+import type { UserRepository } from "../ports/UserRepository.ts";
 
 export interface DeactivateUserInput {
   userId: string;
