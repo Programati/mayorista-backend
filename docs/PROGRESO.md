@@ -14,13 +14,14 @@
 
 | #   | Fase                                                          | Estado    | Notas                                                                                                   |
 | --- | ------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------- |
-| 1   | Setup del proyecto (pnpm, TS, Express, Mongo, estructura)     | En curso  | Conexión a Mongo, app separada de server y Vitest instalado. Falta verificar `echo $?` con base apagada |
+| 1   | Setup del proyecto (pnpm, TS, Express, Mongo, estructura)     | Terminada | Conexión a Mongo, app separada de server, Vitest, estructura de carpetas confirmada, salida con código 1 verificada sin base                      |
 | 2   | Auth: registro, login, JWT, roles                             | En curso  | Módulo users (baja de usuario) en curso. Registro y login pendientes                                    |
 | 3   | Catálogos: marcas, categorías, envases, medidas, empaquetados | Pendiente |                                                                                                         |
 | 4   | Productos y variantes                                         | Pendiente | Renombrar `SkuDuplicado` y `CombinacionDuplicada` a inglés según la convención de nombres               |
 | 5   | Stock                                                         | Pendiente |                                                                                                         |
 | 6   | Pedidos: preview, crear, cancelar                             | Pendiente |                                                                                                         |
 | 7   | Frontend                                                      | Pendiente | Vitest se amplía con `jsdom` o `happy-dom` y `@testing-library/react` al llegar acá                     |
+
 
 Estados posibles: Pendiente · En curso · En revisión · Terminada · Bloqueada.
 
@@ -37,14 +38,15 @@ Estados posibles: Pendiente · En curso · En revisión · Terminada · Bloquead
 
 ## Infraestructura local
 
-| Elemento          | Valor                                                                                             |
-| ----------------- | ------------------------------------------------------------------------------------------------- |
-| Contenedor        | `mongo-mayorista` (imagen `mongo:7`), definido en `docker-compose.yml`                            |
-| Puerto en el host | `27018` (el `27017` lo usa un `mongod` del sistema)                                               |
-| Replica set       | `rs0`, con un único nodo. Host registrado: `localhost:27017` (visto desde dentro del contenedor)  |
-| Base de datos     | `beverage_distributor`, con 9 colecciones e índices de `docs/Database.md` cargados                |
-| Variable          | `MONGODB_URI=mongodb://localhost:27018/beverage_distributor?replicaSet=rs0&directConnection=true` |
-| Tests             | Vitest, comando `pnpm test`. Configuración en `vitest.config.ts`, tests en `tests/`               |
+| Elemento          | Valor                                                                                                                                                               |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Contenedor        | `mongo-mayorista` (imagen `mongo:7`), definido en `docker-compose.yml`                                                                                              |
+| Puerto en el host | `27018` (el `27017` lo usa un `mongod` del sistema)                                                                                                                 |
+| Replica set       | `rs0`, con un único nodo. Host registrado: `localhost:27017` (visto desde dentro del contenedor)                                                                    |
+| Base de datos     | `beverage_distributor`, con 9 colecciones e índices de `docs/Database.md` cargados                                                                                  |
+| Variables         | `MONGODB_URI=mongodb://localhost:27018/beverage_distributor?replicaSet=rs0&directConnection=true`; `JWT_SECRET` (mínimo 32 caracteres, validado en `config/env.ts`) |
+| Tests             | Vitest, comando `pnpm test`. Configuración en `vitest.config.ts`, tests en `tests/`                                                                                 |
+| Dependencias JWT  | `jsonwebtoken` y `@types/jsonwebtoken`. Tiempo de vida del token por defecto: `1h`                                                                                  |
 
 ## Decisiones tomadas
 
