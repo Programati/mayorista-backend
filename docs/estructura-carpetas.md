@@ -27,6 +27,9 @@ mayorista-backend/
 │   │   │   ├── ConflictError.ts     # 409
 │   │   │   ├── ValidationError.ts   # 400
 │   │   │   └── ForbiddenError.ts    # 403
+│   │   ├── persistence/
+│   │   │   ├── isDuplicateKeyError.ts
+│   │   │   └── UserModel.ts
 │   │   ├── http/
 │   │   │   ├── errorHandler.ts      # Traduce errores a respuestas HTTP
 │   │   │   ├── validate.ts          # Middleware de validación de body/query
@@ -45,6 +48,7 @@ mayorista-backend/
 │   │   │   ├── application/
 │   │   │   │   ├── ports/
 │   │   │   │   │   ├── UserRepository.ts       # Interfaz (puerto de salida)
+│   │   │   │   │   ├── AuthUserRepository.ts
 │   │   │   │   │   ├── PasswordHasher.ts       # Interfaz
 │   │   │   │   │   └── TokenService.ts         # Interfaz
 │   │   │   │   └── use-cases/
