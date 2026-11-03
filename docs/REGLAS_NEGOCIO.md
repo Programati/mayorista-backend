@@ -6,6 +6,7 @@ Las reglas viven en `domain` o `application`, no en los controladores ni en la b
 Alcance del MVP: el cliente arma su carrito, confirma el pedido y puede cancelarlo. El admin ve los pedidos y puede cancelar en casos especiales.
 
 Terminología:
+
 - **Unidad suelta:** una botella o lata individual. Es la unidad base del stock.
 - **Empaquetado (packaging):** forma de agrupar unidades (cajón de 8, pack de 6, de 24, de 4, o "Unit" = 1). Define `units`.
 - **Variante:** producto + medida + empaquetado, con su SKU y sus precios. Va embebida en el producto.
@@ -65,10 +66,12 @@ Terminología:
 Un pedido tiene uno o más items. Cada item es `standard` o `mixed`.
 
 **Item `standard`:** cajones o packs completos de una variante.
+
 - El cliente envía `variantId` y `quantity`.
 - El servidor calcula `units = quantity × packaging.units`. El cliente nunca envía `units` en este tipo.
 
 **Item `mixed`:** un empaquetado armado con unidades de varios productos.
+
 - El cliente envía el `packagingId` y las `lines` (`variantId` + `units` de cada una).
 - Ejemplo: un cajón de 8 con 2 Fanta + 2 Sprite + 4 Coca-Cola. Se aplica a cualquier empaquetado (de 4, 6, 24, etc.).
 - Reglas:
@@ -76,7 +79,7 @@ Un pedido tiene uno o más items. Cada item es `standard` o `mixed`.
   2. Todas las líneas deben tener la misma medida (mismo volumen y tipo de envase).
   3. Cada línea debe ser una variante **activa** de ese mismo empaquetado.
   4. Un pedido puede combinar items estándar y mixtos, y puede tener varios mixtos.
-  
+
 ### Precios y total
 
 - Cada línea (y cada item standard) guarda subtotal, el total es la suma de los subtotales. unit_price es informativo.
@@ -116,7 +119,12 @@ Un pedido tiene uno o más items. Cada item es `standard` o `mixed`.
 
 ## 10. Convención de nombres
 
-- No se da importancia a cómo están escritos los nombres en el contexto (camelCase, snake_case, UPPERCASE, PascalCase, etc.). Al proponer nombres nuevos, se decide la convención más adecuada en cada caso, sin preguntar.
+- Nombres de clases, interfaces, funciones, variables, propiedades y archivos de código: en inglés.
+  - Clases e interfaces: PascalCase (`User`, `UserProps`, `CannotDeactivateSelf`).
+  - Funciones, métodos y variables: camelCase (`deactivate`, `modifiedBy`).
+- Mensajes que leen las personas (los que se pasan a `super(...)` o llegan en las respuestas HTTP): en español.
+- En las clases de error, `this.name` tiene el mismo valor que el nombre de la clase, en inglés.
+- Las columnas de Mongo mantienen snake_case (`modified_by`, `password_hash`), como en `Modelo_BD.md`. La conversión a camelCase la hace el adaptador de persistencia.
 
 ---
 
