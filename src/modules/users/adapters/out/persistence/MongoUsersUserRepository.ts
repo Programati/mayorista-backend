@@ -17,7 +17,7 @@ export class MongoUsersUserRepository implements UserRepository {
       return null;
     }
 
-    return new User({
+    const user = new User({
       id: doc._id.toHexString(),
       email: doc.email,
       name: doc.name,
@@ -26,6 +26,8 @@ export class MongoUsersUserRepository implements UserRepository {
       modified: doc.modified,
       modifiedBy: doc.modified_by ? doc.modified_by.toHexString() : null,
     });
+
+    return user;
   }
 
   async guardar(user: User): Promise<void> {
