@@ -1,26 +1,26 @@
 # Progreso del proyecto
 
-Última actualización: 2026-11-03
+Última actualización: 2026-11-04
 
 ## Estado actual
 
 - **Fase:** 2 - Auth: registro, login, JWT, roles
-- **Etapa:** Módulo users, en curso. Hecho: entidad `User` (perfil, con estado privado y `deactivate`), errores de dominio, puerto `UserRepository`, caso de uso `DeactivateUser` y el adaptador de persistencia de users. Hecho en auth: entidad `User` (solo seguridad), `Role`, puerto `AuthUserRepository` con `AuthAccount` y el adaptador de persistencia de auth. Pendiente: tests unitarios de `User.deactivate` y de `DeactivateUser`.
-- **Rama activa:** `feature/users-deactivate` (sin PR todavía)
-- **Próximo paso:** Tests unitarios de `User.deactivate` (auto-baja, ya inactivo, caso feliz), después `DeactivateUser` con un repositorio en memoria
-- **Esperando aprobación para:** Empezar los tests unitarios del módulo users
+- **Etapa:** Módulo users, en curso. Hecho: entidad `User` con `deactivate(actorId, date)`, errores de dominio, puerto `UserRepository`, caso de uso `DeactivateUser`, adaptadores de persistencia de users y auth, y tests unitarios de `User.deactivate`. Auth: entidad `User` (solo seguridad), `Role`, puerto `AuthUserRepository` con `AuthAccount` y adaptador de persistencia. Pendiente: tests unitarios de `DeactivateUser`.
+- **Rama activa:** `test/users-deactivate` (PR pendiente)
+- **Próximo paso:** Tests unitarios de `DeactivateUser` con un repositorio en memoria (usuario inexistente, auto-baja, caso feliz)
+- **Esperando aprobación para:** Empezar los tests unitarios de `DeactivateUser`
 
 ## Fases
 
-| #   | Fase                                                          | Estado    | Notas                                                                                                                                                                                                                     |
-| --- | ------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Setup del proyecto (pnpm, TS, Express, Mongo, estructura)     | Terminada | Conexión a Mongo, app separada de server, Vitest, estructura de carpetas confirmada, salida con código 1 verificada sin base                                                                                              |
-| 2   | Auth: registro, login, JWT, roles                             | En curso  | Users: entidad, puerto, `DeactivateUser` y adaptador listos; tests pendientes. Auth: entidad, `Role`, puerto `AuthUserRepository` (con `AuthAccount`) y adaptador listos. Pendiente: tests, `RegisterUser`, login y `/me` |
-| 3   | Catálogos: marcas, categorías, envases, medidas, empaquetados | Pendiente |                                                                                                                                                                                                                           |
-| 4   | Productos y variantes                                         | Pendiente | Renombrar `SkuDuplicado` y `CombinacionDuplicada` a inglés según la convención de nombres                                                                                                                                 |
-| 5   | Stock                                                         | Pendiente |                                                                                                                                                                                                                           |
-| 6   | Pedidos: preview, crear, cancelar                             | Pendiente |                                                                                                                                                                                                                           |
-| 7   | Frontend                                                      | Pendiente | Vitest se amplía con `jsdom` o `happy-dom` y `@testing-library/react` al llegar acá                                                                                                                                       |
+| #   | Fase                                                          | Estado    | Notas                                                                                                                                                                                                                                               |
+| --- | ------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Setup del proyecto (pnpm, TS, Express, Mongo, estructura)     | Terminada | Conexión a Mongo, app separada de server, Vitest, estructura de carpetas confirmada, salida con código 1 verificada sin base                                                                                                                        |
+| 2   | Auth: registro, login, JWT, roles                             | En curso  | Users: entidad, puerto, `DeactivateUser`, adaptadores y tests de `User.deactivate` listos; faltan tests de `DeactivateUser`. Auth: entidad, `Role`, puerto `AuthUserRepository` y adaptador listos. Pendiente: tests, `RegisterUser`, login y `/me` |
+| 3   | Catálogos: marcas, categorías, envases, medidas, empaquetados | Pendiente |                                                                                                                                                                                                                                                     |
+| 4   | Productos y variantes                                         | Pendiente | Renombrar `SkuDuplicado` y `CombinacionDuplicada` a inglés según la convención de nombres                                                                                                                                                           |
+| 5   | Stock                                                         | Pendiente |                                                                                                                                                                                                                                                     |
+| 6   | Pedidos: preview, crear, cancelar                             | Pendiente |                                                                                                                                                                                                                                                     |
+| 7   | Frontend                                                      | Pendiente | Vitest se amplía con `jsdom` o `happy-dom` y `@testing-library/react` al llegar acá                                                                                                                                                                 |
 
 Estados posibles: Pendiente · En curso · En revisión · Terminada · Bloqueada.
 
@@ -30,7 +30,7 @@ Estados posibles: Pendiente · En curso · En revisión · Terminada · Bloquead
 | -------- | --------- | --------------- | ----------------- |
 | shared   | En curso  | Pendientes      | -                 |
 | auth     | En curso  | Pendientes      | Pendientes        |
-| users    | En curso  | Pendientes      | Pendientes        |
+| users    | En curso  | En curso        | Pendientes        |
 | catalog  | Pendiente | -               | -                 |
 | products | Pendiente | -               | -                 |
 | stock    | Pendiente | -               | -                 |
@@ -92,27 +92,26 @@ Estados posibles: Pendiente · En curso · En revisión · Terminada · Bloquead
 | 2026-11-03 | `User.create` no existe en users: la regla de alta (nace `active`, `modifiedBy` = propio id) vive en el caso de uso             | La entidad no conoce contraseñas ni roles; el alta es una orquestación                                                              |
 | 2026-11-03 | Auth y users no comparten entidades ni puertos; cada módulo tiene su `UserRepository` o `AuthUserRepository`                    | Independencia total entre bounded contexts                                                                                          |
 | 2026-11-03 | `isDuplicateKeyError` en `shared/persistence`, junto al schema                                                                  | Lo usan los dos adaptadores; un helper compartido evita duplicarlo                                                                  |
+| 2026-11-04 | `User.deactivate(actorId, date)` recibe la fecha; el caso de uso la genera con `new Date()`                                     | La entidad no depende del reloj y los tests controlan `modified`                                                                    |
+| 2026-11-04 | Cambios de firma de dominio van en `refactor/`; los tests van en `test/`, sobre la firma ya integrada                           | Cada rama tiene un propósito; no se mezcla comportamiento con pruebas                                                               |
+| 2026-11-04 | El control de rol (`authorize("admin")`) se verifica con tests e2e, no con tests unitarios de la entidad                        | La entidad no conoce roles; la protección vive en la capa HTTP                                                                      |
+| 2026-11-04 | Antes de escribir código se pide el código de referencia; las preguntas de comprobación van solo al cerrar cambios grandes      | Evita código sin contexto y hace el ritmo más ágil (reglas en PERFIL_TECNICO.md y en el skill backend-mayorista)                    |
 
 ## Pendientes y deuda técnica
 
-- [ ] Verificar `echo $?` = 1 con la base apagada (usando `node` sin `--watch`)
 - [ ] Seguridad: el MongoDB del proyecto no tiene autenticación. Anotado para antes de cualquier despliegue
-- [ ] Decidir si `tests/unit/setup.test.ts` se borra cuando existan tests reales de auth
 - [ ] Decidir cómo se resuelve `GET /api/auth/me` (de dónde sale `name`, ya que `auth/User` no lo tiene)
 - [ ] Decidir la orquestación de `RegisterUser` (auth crea credenciales, users crea perfil) y cómo se inserta el documento completo, porque `guardar` solo actualiza
 - [ ] Decidir la respuesta para un `:id` con formato inválido (400 o 404). Hoy el adaptador devuelve `null`, lo que da 404; documentar en `api-endpoints.md`
 - [ ] Renombrar `SkuDuplicado` y `CombinacionDuplicada` en `products/domain/errors.ts` a inglés
 - [ ] Revisar las respuestas de las cuatro preguntas del artefacto de registro (normalización del email, generación del id, `modified_by`, carrera de registros simultáneos)
-- [ ] Decidir si `User.deactivate` recibe la fecha por parámetro para que los tests controlen `modified` (hoy usa `new Date()`)
+- [ ] Tests unitarios de `DeactivateUser` con repositorio en memoria
+- [ ] Tests e2e (supertest) que verifiquen 403 en `DELETE /api/users/:id` con un token de cliente
 - [ ] Tests de integración de `MongoAuthUserRepository` y `MongoUsersUserRepository` contra una base de prueba
 
 ## Preguntas de comprobación pendientes
 
-- Por qué `echo $?` debe ser `1` aunque el mensaje sea el mismo (sin respuesta todavía).
-- Por qué el caso de uso no debe importar `UserModel` (respondida: rompe la regla de dependencias, obliga al test a depender de Mongoose y acopla la lógica a la persistencia).
-- Qué debe devolver o lanzar el caso de uso si el email ya existe, y en qué capa vive la regla (respondida: caso de uso con `ConflictError` y puerto; índice único como segunda barrera).
-- Qué clase de `shared/errors/` lanza `DeactivateUser` para `CannotDeactivateSelf` y para `UserAlreadyInactive` (respondida: `ForbiddenError` y `ConflictError`).
-- En el login, si la contraseña es incorrecta y la cuenta está dada de baja, qué código devuelve el endpoint y por qué (sin respuesta todavía).
+Sin preguntas pendientes.
 
 ## Historial de sesiones
 
@@ -145,3 +144,8 @@ Estados posibles: Pendiente · En curso · En revisión · Terminada · Bloquead
 - Ramas y PRs: `main` (base), `feature/shared-errors` (mergeado), `feature/users-deactivate` (en curso, sin PR).
 - Commits de la rama: `feat(users): add UserRepository port`, `feat(auth): add persistence adapter for auth accounts` y `feat(users): add persistence adapter for user profiles` (o un solo commit si se juntaron).
 - Documentación actualizada: `REGLAS_NEGOCIO.md` (sección 11, bounded contexts y acceso), `api-endpoints.md`, `estructura-carpetas.md`, `PERFIL_TECNICO.md`.
+
+### 2026-11-04
+
+- Qué se hizo: `User.deactivate` recibe la fecha por parámetro (refactor integrado vía PR). `DeactivateUser` pasa `new Date()`. Tests unitarios de `User.deactivate` con tres casos: auto-baja, ya inactivo y caso feliz. Eliminado `tests/unit/setup.test.ts`, ya innecesario. Reglas de trabajo actualizadas en `PERFIL_TECNICO.md` y en el skill `backend-mayorista`. Typecheck en verde.
+- Ramas y PRs: `main` (base), `feature/users-deactivate` (mergeado como PR #11, squash), `refactor/user-deactivate-date-param` (mergeado), `test/users-deactivate` (en curso, PR pendiente).
