@@ -27,7 +27,7 @@ export class DeactivateUser {
     }
 
     try {
-      user.deactivate(actorId);
+      user.deactivate(actorId, new Date());
     } catch (error) {
       if (error instanceof CannotDeactivateSelf) {
         throw new ForbiddenError(error.message);

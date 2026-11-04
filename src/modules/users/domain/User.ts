@@ -49,7 +49,7 @@ export class User {
     return this._modifiedBy;
   }
 
-  deactivate(actorId: string): void {
+  deactivate(actorId: string, date: Date): void {
     if (this.id === actorId) {
       throw new CannotDeactivateSelf();
     }
@@ -57,7 +57,7 @@ export class User {
       throw new UserAlreadyInactive();
     }
     this._active = false;
-    this._modified = new Date();
+    this._modified = date;
     this._modifiedBy = actorId;
   }
 }
